@@ -28,6 +28,8 @@ F = structure_value(r)
 
 # 可視化
 plt.plot(r, F)
+
+
 plt.xlabel("Distance")
 plt.ylabel("Structure Value")
 plt.title("Structure Mapping (Phase-based)")
