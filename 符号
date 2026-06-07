@@ -1,0 +1,31 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def generate_interference_pattern(n_limit):
+    """
+    6n±1 と 4n±1 の干渉を±1の符号として処理する
+    """
+    # 6n±1 の系列
+    series_6n = np.array([6*n + s for n in range(1, n_limit) for s in [-1, 1]])
+    # 4n±1 の系列を角度(ラジアン)として配置
+    series_4n = np.array([4*n + s for n in range(1, n_limit) for s in [-1, 1]])
+    
+    # 干渉パターン: 軸の重なりを±1の符号として生成
+    # ここでは単純な位相差の干渉をモデル化
+    interference = np.sin(series_6n[:, np.newaxis] * (np.pi / series_4n))
+    signs = np.sign(interference) # ±1の符号化
+    
+    return series_6n, signs
+
+# 処理と可視化
+n_limit = 20
+series, signs = generate_interference_pattern(n_limit)
+
+# 符号パターンの分布を可視化
+plt.figure(figsize=(10, 6))
+plt.imshow(signs, cmap='binary', aspect='auto')
+plt.title("Interference Pattern of ±1 (6n±1 vs 4n±1)")
+plt.xlabel("Phase Offset (4n±1)")
+plt.ylabel("Base Frequency (6n±1)")
+plt.colorbar(label="Sign (±1)")
+plt.show()
