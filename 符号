@@ -29,3 +29,15 @@ plt.xlabel("Phase Offset (4n±1)")
 plt.ylabel("Base Frequency (6n±1)")
 plt.colorbar(label="Sign (±1)")
 plt.show()
+
+# 概念コード：場の方程式
+class QuantumFieldSimulation:
+    def __init__(self):
+        self.grid_mass = {} # 4n, 2nの配置
+        self.grid_energy = {} # 6nのエネルギー密度
+        
+    def update_step(self):
+        # 1. 6n場を光速で伝播させる (単純な行列シフト)
+        # 2. 物質(4n, 2n)は、その場の勾配に従って移動する
+        # 3. 結合パターン（±の符号）に基づき場を局所的に増幅/相殺
+
