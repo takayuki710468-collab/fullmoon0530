@@ -41,3 +41,34 @@ class QuantumFieldSimulation:
         # 2. 物質(4n, 2n)は、その場の勾配に従って移動する
         # 3. 結合パターン（±の符号）に基づき場を局所的に増幅/相殺
 
+import numpy as np
+import matplotlib.pyplot as plt
+
+def simulate_optimized(duration, initial_omega, drift_rate):
+    times = np.arange(duration)
+    # 解析的に位相を計算 (theta = omega_0 * t - 0.5 * drift * t^2)
+    theta = initial_omega * times - 0.5 * drift_rate * (times**2)
+    
+    # サイン波のゼロクロスを検出（隣接要素の積が負になる箇所）
+    # np.sin(theta) の符号が変化する点を効率的に抽出
+    signs = np.sign(np.sin(theta))
+    crossings = np.where(np.diff(signs) != 0)[0]
+    
+    intervals = np.diff(crossings)
+    return intervals
+
+# パラメータ設定
+steps = 2000
+omega_0 = 0.5
+drift = 0.0001
+
+intervals = simulate_optimized(steps, omega_0, drift)
+
+# 解析結果の可視化
+plt.figure(figsize=(10, 4))
+plt.hist(intervals, bins=30, alpha=0.7, color='skyblue', edgecolor='black')
+plt.title("Distribution of Intersection Intervals")
+plt.xlabel("Interval Size")
+plt.ylabel("Frequency")
+plt.grid(True, linestyle='--', alpha=0.6)
+plt.show()
