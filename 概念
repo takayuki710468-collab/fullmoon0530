@@ -1,0 +1,47 @@
+import sympy
+import numpy as np
+
+class PrimeBaseUniverse:
+    def __init__(self, max_limit=120):
+        self.max_limit = max_limit
+        self.spatial_base = 3  # 空間基底
+        self.material_base = 2 # 物質基底
+        self.primes = list(sympy.primerange(1, max_limit + 1))
+        
+    def generate_grid(self):
+        """素数場を生成し、基底によるフィルターを通して合成数（物質）を安定化させる"""
+        grid = np.arange(1, self.max_limit + 1)
+        
+        # 場は素数場であるが、物質基底(2)と空間基底(3)の干渉により構造（合成数）が安定する
+        # ここでは基底の倍数や位相の交差として状態を評価
+        states = []
+        for n in grid:
+            is_prime = n in self.primes
+            # 空間基底(3)と物質基底(2)の比率・干渉による合成数の安定度計算
+            stability = (n % self.material_base == 0) and not is_prime
+            
+            states.append({
+                "value": n,
+                "is_prime": is_prime,
+                "stability": stability,
+                # 刻みの判定（初期部4刻み、のち5刻み、閾値80や120など）
+                "tier": "initial" if n <= 16 else ("mid" if n <= 80 else "limit")
+            })
+        return states
+
+    def evaluate_structure(self):
+        """原子番号の上限やエネルギー準位と素数の絡みをシミュレート"""
+        universe_states = self.generate_grid()
+        stable_structures = [s for s in universe_states if s["stability"]]
+        
+        print(f"--- 空間基底: {self.spatial_base} / 物質基底: {self.material_base} ---")
+        print(f"総グリッド数（上限）: {self.max_limit}")
+        print(f"安定した合成数構造の数: {len(stable_structures)}")
+        
+        # 120の限界点や素数点との絡みを抽出
+        limit_points = [s["value"] for s in universe_states if s["value"] == self.max_limit]
+        print(f"構造の終端・限界点: {limit_points}")
+
+# 実行
+universe = PrimeBaseUniverse(max_limit=120)
+universe.evaluate_structure()
